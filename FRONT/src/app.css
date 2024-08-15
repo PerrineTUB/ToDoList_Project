@@ -2,12 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+	color: #4b3e45;
+}
 button {
-	background-color: #e2bad1;
-	padding: 3px;
+	background-color: #fbcfe8;
+	padding: 5px;
 	border-radius: 5px;
 
 	&:hover {
-		background-color: #bc9bae;
+		background-color: #e2bad1;
 	}
 }
