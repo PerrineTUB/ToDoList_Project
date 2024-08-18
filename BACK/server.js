@@ -5,6 +5,7 @@ import {
   GetTaskById,
   AddNewTask,
   DeleteTaskById,
+  UpdateTask,
 } from "./apiBack.js";
 
 const port = 3000;
@@ -34,10 +35,19 @@ app.get("/task/:id", async (req, res) => {
 });
 
 //Permet d'ajouter une nouvelle tâche
-app.post("add/task/:label", async (req, res) => {
+app.post("/add/task/:label", async (req, res) => {
   try {
     const result = await AddNewTask(req.params.label);
-    console.log("result= ", result);
+    res.json(result);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+//Mise à jour de la tâche
+app.put("/update/task/:id", async (req, res) => {
+  try {
+    const result = await UpdateTask(req.params.id);
     res.json(result);
   } catch (error) {
     res.send(error);
@@ -45,7 +55,7 @@ app.post("add/task/:label", async (req, res) => {
 });
 
 //Permet de supprimer une tâche
-app.delete("delete/task/:id", async (req, res) => {
+app.delete("/delete/task/:id", async (req, res) => {
   try {
     const result = await DeleteTaskById(req.params.id);
     console.log("result= ", result);

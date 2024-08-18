@@ -52,7 +52,16 @@ async function GetTaskById(id) {
 async function AddNewTask(label) {
 	try {
 		const resp = await Query(`add/task/${label}`, 'post');
-		console.log('resp= ', resp);
+		return resp;
+	} catch (error) {
+		throw error;
+	}
+}
+
+//Mise à jour d'une tâche
+async function UpdateTask(id) {
+	try {
+		const resp = await Query(`update/task/${id}`, 'put');
 		return resp;
 	} catch (error) {
 		throw error;
@@ -70,4 +79,4 @@ async function DeleteTaskById(id) {
 	}
 }
 
-export { GetTasks, GetTaskById, AddNewTask, DeleteTaskById };
+export { GetTasks, GetTaskById, AddNewTask, DeleteTaskById, UpdateTask };

@@ -65,11 +65,23 @@ async function GetTaskById(id) {
 async function AddNewTask(label) {
   const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
   console.log("Date= ", date);
-  const sql = `INSERT INTO tasks(task_name, task_date, task_done) VALUES ('${label}','${date}',0)`;
+  const sql = `INSERT INTO tasks(task_name, task_creation, task_done) VALUES ('${label}','${date}',0)`;
   try {
     let newTask = await Query(sql);
     console.log(newTask);
     return newTask;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//Mise à jour d'une tâche
+async function UpdateTask(id) {
+  const date = dayjs().format("YYYY-MM-DD HH:mm:ss");
+  const sql = `UPDATE tasks SET task_validation = '${date}', task_done = 1 WHERE id = ${id}`;
+  try {
+    let updateTask = await Query(sql);
+    return updateTask;
   } catch (error) {
     console.log(error);
   }
@@ -87,4 +99,4 @@ async function DeleteTaskById(id) {
   }
 }
 
-export { GetTasks, GetTaskById, AddNewTask, DeleteTaskById };
+export { GetTasks, GetTaskById, AddNewTask, DeleteTaskById, UpdateTask };

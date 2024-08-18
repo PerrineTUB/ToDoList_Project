@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import Fa from 'svelte-fa';
 	import { faTrash, faPen, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
-	import { AddNewTask, GetTasks, DeleteTaskById } from '../services/apiFront.js';
+	import { AddNewTask, GetTasks, DeleteTaskById, UpdateTask } from '../services/apiFront.js';
 
 	let tasks;
 	let task = {};
@@ -23,8 +23,12 @@
 		loading = false;
 	}
 
-	async function updateStatus(taskStatus) {
-		console.log('taskStaus=', taskStatus);
+	async function updateStatus(id) {
+		loading = true;
+		await UpdateTask(id);
+		tasks = await GetTasks();
+
+		loading = false;
 	}
 
 	onMount(async () => {
@@ -63,23 +67,32 @@
 
 				<div class="flex flex-col space-between gap-3">
 					{#each tasks as task}
-						<div class="items-center row">
-							<input
-								type="checkbox"
-								class="h-4 w-4"
-								checked={task.task_done === 1 ? 'checked' : ''}
-								on:click={() => updateStatus(task.task_done)}
-							/>
-							<span>{task.id} - {task.task_name}</span>
-							<button title="Supprimer" class="icon flex" on:click={() => DeleteTask(task.id)}>
-								<Fa icon={faTrash} />
-							</button>
-						</div>
+						{#if task.task_done === 0}
+							<div class="items-center row">
+								<input
+									type="checkbox"
+									class="h-4 w-4"
+									checked={task.task_done === 1 ? 'checked' : ''}
+									on:click={() => updateStatus(task.id)}
+								/>
+								<span>{task.id} - {task.task_name}</span>
+								<button title="Supprimer" class="icon flex" on:click={() => DeleteTask(task.id)}>
+									<Fa icon={faTrash} />
+								</button>
+							</div>
+						{/if}
 					{/each}
 				</div>
 			</div>
 			<div>
-				<h2 class="italic">Liste des tâches réalisées :</h2>
+				<h2 class="italic mb-8">Liste des tâches réalisées :</h2>
+				<div class="flex flex-col space-between gap-3">
+					{#each tasks as task}
+						{#if task.task_done === 1}
+							<span>{task.id} - {task.task_name}</span>
+						{/if}
+					{/each}
+				</div>
 			</div>
 		</div>
 	{/if}
